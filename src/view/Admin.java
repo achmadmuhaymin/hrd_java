@@ -1,11 +1,13 @@
 package view;
 
 
+import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import controller.KoneksiDB;
 import controller.ManajemenAbsensi;
 import controller.ManajemenDasbor;
 import controller.ManajemenPegawai;
 import java.awt.Dimension;
+import java.awt.List;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.InputStream;
@@ -18,6 +20,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -26,6 +29,10 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import model.ModelAbsensi;
 import model.ModelFilter;
 import model.ModelPegawai;
@@ -96,6 +103,7 @@ public class Admin extends javax.swing.JFrame {
     public void loadTblAbsen() throws SQLException{
         ManajemenAbsensi matl = new ManajemenAbsensi();
         matl.loadDataAbsen(tabelabsen);
+       
     }
     
     
@@ -1365,7 +1373,7 @@ public class Admin extends javax.swing.JFrame {
         txtAbsen_keterangan.setText("");
         img_foto_absen.setText("foto");
         img_foto_absen.setIcon(null);
-        
+        AutoNumber();
         
     }//GEN-LAST:event_btnAbsen_tambahActionPerformed
 
@@ -1548,7 +1556,27 @@ public class Admin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+public void AutoNumber() {
+        try {
 
+            java.sql.Connection line_konek = (com.mysql.jdbc.Connection) controller.KoneksiDB.getKoneksi();
+            java.sql.Statement line_statemen = line_konek.createStatement();
+            String query_bukaTabel = "select max(right(no,4)) as no_urut from tblabsen";
+            java.sql.ResultSet line_result = line_statemen.executeQuery(query_bukaTabel);
+            if (line_result.first() == false) {
+                txtAbsen_no.setText("1");
+            } else {
+                line_result.last();
+                int no = line_result.getInt(1) + 1;
+                String nomor = String.valueOf(no);
+                int oto = nomor.length();
+                txtAbsen_no.setText(nomor);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();//penanganan masalah
+        }
+    }
+    
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
          try {
