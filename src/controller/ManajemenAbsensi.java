@@ -31,7 +31,7 @@ public class ManajemenAbsensi {
     
         sql = "SELECT tblabsen.no, tblabsen.tanggal, tblabsen.idpegawai, tblpegawai.nama, tblpegawai.jabatan, tblabsen.izin, tblabsen.keterangan, tblpegawai.foto "
                 + "FROM tblabsen INNER JOIN tblpegawai where tblabsen.idpegawai=tblpegawai.idpegawai "
-                + "ORDER BY tblabsen.no desc;";
+                + "ORDER BY tblabsen.no asc;";
         
         pst = KoneksiDB.getKoneksi().prepareStatement(sql);
         rs = pst.executeQuery(sql);
